@@ -10,6 +10,6 @@ if __name__ == "__main__":
 	# label,values = f.load_train()
 	# print(label)
 
-	print( Validation.validate_with_knn() )
+	Validation.validate_with_knn( Validation.for_testing() )
 
 	#c = Classifier( f )
