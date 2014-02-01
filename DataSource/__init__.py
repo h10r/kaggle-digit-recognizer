@@ -2,8 +2,12 @@ import csv
 import numpy as np
 
 class DataSource():
+
 	PATH_TO_TRAIN = "data/train20.csv"
 	PATH_TO_TEST = "data/test20.csv"
+	
+	#PATH_TO_TRAIN = "data/train.csv"
+	#PATH_TO_TEST = "data/test.csv"
 
 	def load_train(self):
 		train_set = self.load_csv( self.PATH_TO_TRAIN )
