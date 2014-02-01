@@ -17,7 +17,11 @@ class DataSource():
 		return all_photos_without_labels, all_labels
 	
 	def load_test(self):
-		return self.load_csv( self.PATH_TO_TEST )
+		test_set = self.load_csv( self.PATH_TO_TEST )
+
+		all_photos_without_header = test_set[1:,:]
+
+		return all_photos_without_header
 
 	def load_csv(self, filename):
 		return np.asarray( list( csv.reader( open( filename, 'rt') ) ) )
