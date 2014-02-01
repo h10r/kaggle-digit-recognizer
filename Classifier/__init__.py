@@ -24,7 +24,7 @@ class Classifier():
 	def load_from_features(self):
 		print( "load_from_features" )
 
-		self.train_values,self.train_labels = self.features.load_train()
+		self.train_values, self.train_labels = self.features.load_train()
 
 		self.test_values = self.features.load_test()
 
@@ -38,55 +38,41 @@ class Classifier():
 	def cross_validation(self):
 		print( "cross_validation" )
 
-		cv_X_train, cv_X_test, cv_y_train, cv_y_test = cross_validation.train_test_split( self.train_values,self.train_labels, test_size=0.33, random_state=42 )
-
-		print( "cv_X_train" )
-		print( len( cv_X_train ) )
-
-		print( "cv_X_test" )
-		print( len( cv_X_test ) )
+		X_train, X_test, y_train, y_test = cross_validation.train_test_split( self.train_values,self.train_labels, random_state=1)
 		
-		print( "cv_y_train" )
-		print( len( cv_y_train ) )
-
-		print( "cv_y_test" )
-		print( len( cv_y_test ) )
-
-		self.print_hr()
-
+		
 		print( "SVC: " )
-		self.clf = SVC(gamma=0.0001).fit(cv_X_train, cv_y_train)
-		print( self.clf.score( cv_X_test, cv_y_test ) )
+		self.clf = SVC(gamma=0.0001).fit(X_train, y_train)
+		print( self.clf.score( X_test, y_test ) )
 		
 		self.print_hr()
 		
 		print( "LogisticRegression: " )
-		self.clf = LogisticRegression(C=1e5).fit(cv_X_train, cv_y_train)
-		print( self.clf.score( cv_X_test, cv_y_test ) )
+		self.clf = LogisticRegression(C=1e5).fit(X_train, y_train)
+		print( self.clf.score( X_test, y_test ) )
 
 		self.print_hr()
 
 		print( "LDA: " )
-		self.clf = LDA().fit(cv_X_train, cv_y_train)
-		print( self.clf.score( cv_X_test, cv_y_test ) )
+		self.clf = LDA().fit(X_train, y_train)
+		print( self.clf.score( X_test, y_test ) )
 		
 		"""
-
 		print( "KNeighborsClassifier: " )
-		self.clf = KNeighborsClassifier(3).fit(cv_X_train, cv_y_train)
-		print( clf.score( cv_X_test, cv_y_test ) )
+		self.clf = KNeighborsClassifier(3).fit(X_train, y_train)
+		print( clf.score( X_test, y_test ) )
 
 		print( "DecisionTreeClassifier: " )
-		self.clf = DecisionTreeClassifier(max_depth=5).fit(cv_X_train, cv_y_train)
-		print( clf.score( cv_X_test, cv_y_test ) )
+		self.clf = DecisionTreeClassifier(max_depth=5).fit(X_train, y_train)
+		print( clf.score( X_test, y_test ) )
 
 		print( "RandomForestClassifier: " )
-		self.clf = RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1).fit(cv_X_train, cv_y_train)
-		print( clf.score( cv_X_test, cv_y_test ) )
+		self.clf = RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1).fit(X_train, y_train)
+		print( clf.score( X_test, y_test ) )
 
 		print( "GaussianNB: " )
-		self.clf = GaussianNB().fit(cv_X_train, cv_y_train)
-		print( clf.score( cv_X_test, cv_y_test ) )
+		self.clf = GaussianNB().fit(X_train, y_train)
+		print( clf.score( X_test, y_test ) )
 		"""
 
 	def print_hr(self):
