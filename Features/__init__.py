@@ -13,4 +13,4 @@ class Features():
 	def load_csv(self, filename):
 		csv_as_list = list( csv.reader(open( filename, 'rt') ) )
 		caption = csv_as_list.pop(0)
-		return caption, csv_as_list
+		return csv_as_list, caption

@@ -5,11 +5,8 @@ from Classifier import *
 from Validation import *
 
 if __name__ == "__main__":
-	# f = Features()
+	f = Features()
+	c = Classifier( f )
 
-	# label,values = f.load_train()
-	# print(label)
+	#Validation.validate_with_knn( Validation.for_testing() )
 
-	Validation.validate_with_knn( Validation.for_testing() )
-
-	#c = Classifier( f )
