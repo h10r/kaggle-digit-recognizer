@@ -1,43 +1,46 @@
-import csv
 import numpy as np
 
 class DataSource():
 
-	PATH_TO_TRAIN = "data/train3000.csv"
-	PATH_TO_TEST = "data/test3000.csv"
+	PATH_TO_TRAIN = "data/train20.csv"
+	PATH_TO_TEST = "data/test20.csv"
 	
 	#PATH_TO_TRAIN = "data/train.csv"
 	#PATH_TO_TEST = "data/test.csv"
 
-	def load_train(self):
-		train_set = self.load_csv( self.PATH_TO_TRAIN )
-		"""
-		header = train_set[0,:]
-		"""
+	# https://www.kaggle.com/wiki/GettingStartedWithPythonForDataScience/history/969
 
-		all_labels = train_set[1:,0].tolist()
-		all_photos_without_labels = train_set[1:,1:].tolist()
+	def read_data( self, file_name ):
+		f = open(file_name)
 		
-		# print( "all_photos_without_labels" )
-		# print( len( all_photos_without_labels ) )
-		# print( len( all_photos_without_labels[0] ) )
+		#ignore header
+		f.readline()
 
-		# print( "all_labels" )
-		# print( len( all_labels ) )
-		# print( len( all_labels[0] ) )
+		samples = []
+		for line in f:
+			line = line.strip().split(",")
+			sample = [int(x) for x in line]
+			samples.append(sample)
+		return samples
 
-		return all_photos_without_labels, all_labels
-	
-	def load_test(self):
-		test_set = self.load_csv( self.PATH_TO_TEST )
+	def write_delimited_file( self, file_path, data,header=None, delimiter="," ):
+		f_out = open(file_path,"w")
+		if header is not None:
+			f_out.write(delimiter.join(header) + "\n")
+		for line in data:
+			if isinstance(line, str):
+				f_out.write(line + "\n")
+			else:
+				f_out.write( str(line) + "\n")
+		f_out.close()
 
-		all_photos_without_header = test_set[1:,:].tolist()
+	def load_train_target_and_test( self ):
+		train = self.read_data( self.PATH_TO_TRAIN )
 
-		# print( "all_photos_without_header" )
-		# print( len( all_photos_without_header ) )
-		# print( len( all_photos_without_header[0] ) )
-
-		return all_photos_without_header
-
-	def load_csv(self, filename):
-		return np.asarray( list( csv.reader( open( filename, 'rt') ) ) )
+		target = [x[0] for x in train]
+		train = [x[1:] for x in train]
+		
+		test = self.read_data( self.PATH_TO_TEST )
+		
+		return train,target,test
+		

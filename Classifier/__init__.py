@@ -2,7 +2,6 @@ import numpy as np
 
 from sklearn import cross_validation
 
-import csv
 from random import randint
 
 from sklearn.neighbors import KNeighborsClassifier
@@ -19,40 +18,44 @@ class Classifier():
 	KNN_BENCHMARK = "data/knn_benchmark.csv"
 	RF_BENCHMARK = "data/rf_benchmark.csv"
 
-	def __init__(self, features):
-		self.features = features
+	# via http://peekaboo-vision.blogspot.se/2010/09/mnist-for-ever.html
+	GAMMA = 0.00728932024638
+	C = 2.82842712475
+
+	def __init__(self, data_source):
+		self.data_source = data_source
 		
-		self.load_from_features()
+		self.clf = SVC(C=self.C, kernel="rbf", gamma=self.GAMMA)
+
+		#self.clf = RandomForestClassifier(n_estimators=100, n_jobs=2)
+		#self.clf = GaussianNB()
+
+		self.train, self.target, self.test = self.data_source.load_train_target_and_test()
+
+		#self.run_classifier()
+
+		self.run_and_write_classifier_for_release()
+
+	def run_and_write_classifier_for_release(self):
+		results = []
 		
-		self.run_classifier()
+		self.clf.fit( self.train, self.target )
 
-	def load_from_features(self):
-		print( "load_from_features" )
+		predicted_probs = self.clf.predict( self.test )
+		
+		print( predicted_probs )
 
-		self.train_values, self.train_labels = self.features.load_train()
+		self.data_source.write_delimited_file( "kaggle/heuer_kaggle_release.csv", predicted_probs )
 
-		#self.test_values = self.features.load_test()
-
+	"""
 	def run_classifier(self):
+
 		print( "run_classifier" )
 		print()
-		print( "SVC: " )
 		
 		cv_train_values, cv_test_values, cv_train_labels, cv_test_labels = cross_validation.train_test_split( self.train_values,self.train_labels, random_state=1)
 		
-		print( "train_values" )
-		print( len( cv_train_values ) )
-		
-		print( "test_values" )
-		print( len( cv_test_values ) )
-		
-		print( "train_labels" )
-		print( len( cv_train_labels ) )
-		
-		print( "test_labels" )
-		print( len( cv_test_labels ) )
-
-		self.clf = SVC(gamma=0.001).fit( cv_train_values, cv_train_labels )
+		self.clf = self.clf_model.fit( cv_train_values, cv_train_labels )
 		predicted_set = list( map( self.clf.predict, cv_test_values ) )
 		compare_score = self.compare_two_sets( predicted_set, cv_test_labels )
 
@@ -69,8 +72,6 @@ class Classifier():
 		
 		
 		#print( self.clf.score( X_test, y_test ) )
-		
-		"""
 		
 		print( "LogisticRegression: " )
 		self.clf = LogisticRegression(C=1e5).fit(X_train, y_train)
@@ -96,7 +97,7 @@ class Classifier():
 		print( "GaussianNB: " )
 		self.clf = GaussianNB().fit(X_train, y_train)
 		print( clf.score( X_test, y_test ) )
-		"""
+	"""
 
 	def compare_two_sets( self, set_a, set_b ):
 		set_len = len( set_a )
@@ -107,14 +108,12 @@ class Classifier():
 
 		matches = 0
 		for i in range( set_len ):
-			print( set_a[i][0] )
-			print( set_b[i][0] )
-			print( )
 			if set_a[i][0] == set_b[i][0]:
 				matches = matches + 1
 
 		return matches/float(set_len)
 
+	"""
 	def validate_with_knn( self, train_set ):
 		caption,validation_set = self.load_csv( self.KNN_BENCHMARK )
 		return compare_two_sets( train_set, validation_set )
@@ -127,3 +126,4 @@ class Classifier():
 		csv_as_list = list( csv.reader(open( filename, 'rt') ) )
 		caption = csv_as_list.pop(0)
 		return caption,csv_as_list
+	"""
