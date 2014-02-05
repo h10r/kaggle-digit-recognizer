@@ -15,17 +15,16 @@ from sklearn.svm import SVC
 
 class Classifier():
 
-	KNN_BENCHMARK = "data/knn_benchmark.csv"
-	RF_BENCHMARK = "data/rf_benchmark.csv"
-
 	# via http://peekaboo-vision.blogspot.se/2010/09/mnist-for-ever.html
-	GAMMA = 0.00728932024638
-	C = 2.82842712475
+	# GAMMA = 0.00728932024638
+	# C = 2.82842712475
 
 	def __init__(self, data_source):
 		self.data_source = data_source
 		
-		self.clf = SVC(C=self.C, kernel="rbf", gamma=self.GAMMA)
+		# self.clf = SVC(C=self.C, kernel="rbf", gamma=self.GAMMA)
+		#self.clf = SVC(gamma=0.001)
+		self.clf = KNeighborsClassifier(3)
 
 		#self.clf = RandomForestClassifier(n_estimators=100, n_jobs=2)
 		#self.clf = GaussianNB()
@@ -45,7 +44,7 @@ class Classifier():
 		
 		print( predicted_probs )
 
-		self.data_source.write_delimited_file( "kaggle/heuer_kaggle_release.csv", predicted_probs )
+		self.data_source.write_delimited_file( "kaggle/heuer_kaggle_release.csv", predicted_probs, header="ImageId,Label" )
 
 	"""
 	def run_classifier(self):
@@ -112,18 +111,3 @@ class Classifier():
 				matches = matches + 1
 
 		return matches/float(set_len)
-
-	"""
-	def validate_with_knn( self, train_set ):
-		caption,validation_set = self.load_csv( self.KNN_BENCHMARK )
-		return compare_two_sets( train_set, validation_set )
-
-	def validate_with_rf( self, train_set ):
-		caption,validation_set = self.load_csv( self.RF_BENCHMARK )
-		return compare_two_sets( train_set, validation_set )
-
-	def load_csv( self, filename):
-		csv_as_list = list( csv.reader(open( filename, 'rt') ) )
-		caption = csv_as_list.pop(0)
-		return caption,csv_as_list
-	"""
