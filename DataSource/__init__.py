@@ -2,8 +2,8 @@ import numpy as np
 
 class DataSource():
 
-	PATH_TO_TRAIN = "data/train20.csv"
-	PATH_TO_TEST = "data/test20.csv"
+	PATH_TO_TRAIN = "data/train3000.csv"
+	PATH_TO_TEST = "data/test3000.csv"
 	
 	#PATH_TO_TRAIN = "data/train.csv"
 	#PATH_TO_TEST = "data/test.csv"
@@ -23,15 +23,15 @@ class DataSource():
 			samples.append(sample)
 		return samples
 
-	def write_delimited_file( self, file_path, data,header=None, delimiter="," ):
+	def write_delimited_file( self, file_path, data, header=None, delimiter="," ):
 		f_out = open(file_path,"w")
 		if header is not None:
-			f_out.write(delimiter.join(header) + "\n")
-		for line in data:
-			if isinstance(line, str):
-				f_out.write(line + "\n")
+			f_out.write( header + "\n")
+		for line,value in enumerate(data):
+			if isinstance(value, str):
+				f_out.write( str(line+1) + delimiter + value + "\n")
 			else:
-				f_out.write( str(line) + "\n")
+				f_out.write( str(line+1) + delimiter + str(value) + "\n")
 		f_out.close()
 
 	def load_train_target_and_test( self ):
