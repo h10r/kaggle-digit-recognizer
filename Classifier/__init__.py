@@ -13,23 +13,24 @@ from sklearn.lda import LDA
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 
+from DataSource import *
+
 class Classifier():
 
 	# via http://peekaboo-vision.blogspot.se/2010/09/mnist-for-ever.html
 	# GAMMA = 0.00728932024638
 	# C = 2.82842712475
 
-	def __init__(self, data_source):
-		self.data_source = data_source
-		
+	def __init__(self):
+
 		# self.clf = SVC(C=self.C, kernel="rbf", gamma=self.GAMMA)
 		#self.clf = SVC(gamma=0.001)
-		self.clf = KNeighborsClassifier(3)
+		#self.clf = KNeighborsClassifier(3)
 
-		#self.clf = RandomForestClassifier(n_estimators=100, n_jobs=2)
+		self.clf = RandomForestClassifier(n_estimators=500, n_jobs=2)
 		#self.clf = GaussianNB()
 
-		self.train, self.target, self.test = self.data_source.load_train_target_and_test()
+		self.train, self.target, self.test = DataSource.load_train_target_and_test()
 
 		#self.run_classifier()
 
@@ -44,7 +45,7 @@ class Classifier():
 		
 		print( predicted_probs )
 
-		self.data_source.write_delimited_file( "kaggle/heuer_kaggle_release.csv", predicted_probs, header="ImageId,Label" )
+		DataSource.write_delimited_file( "kaggle/heuer_kaggle_release.csv", predicted_probs, header="ImageId,Label" )
 
 	"""
 	def run_classifier(self):

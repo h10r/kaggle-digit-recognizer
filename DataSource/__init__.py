@@ -2,8 +2,8 @@ import numpy as np
 
 class DataSource():
 
-	PATH_TO_TRAIN = "data/train3000.csv"
-	PATH_TO_TEST = "data/test3000.csv"
+	PATH_TO_TRAIN = "data/train.csv"
+	PATH_TO_TEST = "data/test.csv"
 	
 	#PATH_TO_TRAIN = "data/train.csv"
 	#PATH_TO_TEST = "data/test.csv"
